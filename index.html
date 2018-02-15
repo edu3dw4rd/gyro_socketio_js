@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>REST Test</title>
+	<style type="text/css">
+		#square{
+			width: 100px;
+			height: 100px;
+			background-color: #3498db;
+			position: relative;
+		}
+	</style>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+	<div id="square"></div>
+
+	<script type="text/javascript">
+		var socket = io.connect(),
+			square = $("#square");
+
+		console.log(square.position());
+
+		// square.css({'left': 20});
+		// console.log(square.position());
+		socket.on('move', function(data){
+			console.log(data.position.x);
+			var x=square.position().left, y=square.position().top;
+			
+			if(Math.round(data.position.x) > 1336){
+				x = 1336;
+			}else if(Math.round(data.position.x) < 0){
+				x = 0;
+			} else{
+				x = Math.round(data.position.x);
+			}
+
+			if(Math.round(data.position.y) > 431){
+				y = 431;
+			}else if(Math.round(data.position.y) < 0){
+				y = 0;
+			} else{
+				y = Math.round(data.position.y);
+			}
+
+			square.css(
+				{'left': x, 'top': y}
+			);
+			// square.css({
+			// 	'-webkit-transform': 'translate({$x}px, {$y}px)',
+			// 	'transform': 'translate({$x}px, {$y}px)'
+			// });
+		});
+
+		// square.mousemove(function(e){
+		// 	console.log(e.pageX);
+		// 	console.log(e.pageY);
+
+		// 	// square.animate({'left':e.pageX}, 0);
+		// 	square.css({'left': e.pageX + square.position().left, 'top': e.pageY});
+
+		// })
+	</script>
+</body>
+</html>
